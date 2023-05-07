@@ -1,8 +1,8 @@
 import m from 'mithril';
-import {getFile} from './storage';
+import {getFile, modifyFile} from './storage';
 
 export function File({attrs: {id}}) {
-	const file = getFile(id)
+	const file = getFile(id);
 	function view() {
 		return (
 			<main>
@@ -19,11 +19,11 @@ export function File({attrs: {id}}) {
 		const ctx = canvas.getContext("2d");
 		let dragging = false;
 		let lastX, lastY;
-		let zeroX = 0, zeroY = 0;
-		let squareSize = 17;
+		let zeroX = file.lastPosition.x ?? 0, zeroY = file.lastPosition.y ?? 0;
+		let squareSize = file.lastZoom ?? 17;
 	
 		const startDrag = (e) => (dragging = true, lastX = e.clientX, lastY = e.clientY);
-		const stopDrag = () => dragging = false;
+		const stopDrag = () => (dragging = false, file.lastPosition = {x: zeroX, y: zeroY});
 		const drag = (e) => {
 			if (dragging) {
 				const dx = e.clientX - lastX;
@@ -79,8 +79,11 @@ export function File({attrs: {id}}) {
 			e.preventDefault();
 			squareSize += ~~(e.deltaX / 3);
 			if (squareSize <= 5) squareSize = 5;
+			file.lastZoom = squareSize
 			draw();
 		}
+
+		const save = () => modifyFile(file);
 
 		resize();
 
@@ -94,6 +97,7 @@ export function File({attrs: {id}}) {
 		canvas.addEventListener("touchend", stopDrag);
 
 		canvas.addEventListener("wheel", zoom)
+		setInterval(save, 6000)
 	}
 		
 	return {view, oncreate}

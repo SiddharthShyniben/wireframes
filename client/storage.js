@@ -31,6 +31,8 @@ export function createFile() {
 		id: [...Array(8)].map(_ => (~~(Math.random() * 36)).toString(36)).join(''),
 		content: [],
 		creationDate: new Date().getTime(),
+		lastPosition: {x: 0, y: 0},
+		lastZoom: 17
 	}
 	file.modificationDate = file.creationDate;
 
@@ -51,6 +53,15 @@ export function getFiles() {
 export function getFile(id) {
 	const files = getFiles();
 	return files.find(f => f.id === id);
+}
+
+export function modifyFile(file) {
+	console.log(getFiles());
+	let files = getFiles();
+	file.modificationDate = new Date().getTime();
+	files = [...files.filter(f => f.id !== file.id), file];
+	setFiles(files);
+	console.log(getFiles());
 }
 
 // TODO: Message for corruption?
