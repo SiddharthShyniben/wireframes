@@ -14,3 +14,19 @@ div {
 
 html, body {margin: 0; height: 100%; overflow: hidden}
 
+main {
+	margin: 1em;
+}
+
+ul {
+	padding: 0;
+}
+
+/* li { */
+/* 	list-style-type: none; */
+/* 	margin: 0; */
+/* 	margin-bottom: 1em; */
+/* 	padding: 1em; */
+/* 	border-radius: 5px; */
+/* 	background-color: #DDDD; */
+/* } */
